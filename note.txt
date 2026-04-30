@@ -1,0 +1,8 @@
+npm install express dotenv cors morgan
+npm install -D typescript @types/express @types/node @types/dotenv @types/cors nodemon ts-node @types/morgan
+
+npm i cookie-parser bcrypt compression express-rate-limit express-validator
+npm i -D @types/cookie-parser
+
+npm init -y
+npx tsc --init

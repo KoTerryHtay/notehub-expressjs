@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum GroupType {
+  PUBLIC
+  PRIVATE
+}
+
+enum RoleName {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String?
+  email    String  @unique
+  password String
+
+  refreshToken String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts       Post[]
+  memberships GroupMember[]
+}
+
+model Group {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  type        GroupType @default(PUBLIC)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  members GroupMember[]
+  posts   Post[]
+}
+
+model GroupMember {
+  id       Int      @id @default(autoincrement())
+  role     RoleName @default(MEMBER)
+  joinedAt DateTime @default(now())
+
+  userId  Int
+  user    User  @relation(fields: [userId], references: [id])
+  groupId Int
+  group   Group @relation(fields: [groupId], references: [id])
+
+  // RBAC logic: One User, One Group, One Role
+  @@unique([userId, groupId])
+}
+
+model Post {
+  id       Int     @id @default(autoincrement())
+  content  String
+  imageUrl String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authorId Int
+  author   User @relation(fields: [authorId], references: [id])
+
+  groupId Int?
+  group   Group? @relation(fields: [groupId], references: [id])
+}
