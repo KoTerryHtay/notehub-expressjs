@@ -70,6 +70,7 @@ src/
 ├── middlewares/        # Custom middlewares (auth.ts)
 ├── modules/            # Feature-based modules
 │   ├── auth/           # Auth Controller, Routes, and Service
+│   └── group/           # group Controller, Routes, and Service
 │   └── post/           # Post Controller, Routes, and Service
 ├── routes/             # Centralized API route index
 ├── types/              # Global TypeScript types/interfaces
@@ -82,130 +83,50 @@ Feature-based structure = scalable + clean architecture
 
 ---
 
-## &#x20;Authentication APIs
+# 📝 Note Hub API Documentation
 
-### 1. Register
+## 🔐 Authentication APIs
 
-```http
-POST /api/register
-```
+| Method | Endpoint          | Description                      | Body                                          |
+| ------ | ----------------- | -------------------------------- | --------------------------------------------- |
+| POST   | `/api/register`   | Register a new user              | `{ "email": "string", "password": "string" }` |
+| POST   | `/api/login`      | Login user                       | `{ "email": "string", "password": "string" }` |
+| GET    | `/api/auth-check` | Check authentication status (🔒) | -                                             |
+| POST   | `/api/logout`     | Logout user (🔒)                 | -                                             |
 
-**Body:**
-
-```json
-{
-  "email": "user1@gmail.com",
-  "password": "12345678"
-}
-```
+> 🔒 = Requires authentication (via session/token)
 
 ---
 
-### 2. Login
+## 📄 Posts APIs
 
-```http
-POST /api/login
-```
+| Method | Endpoint                         | Description                     | Body                                                                          |
+| ------ | -------------------------------- | ------------------------------- | ----------------------------------------------------------------------------- |
+| GET    | `/api/posts`                     | Get all posts                   | -                                                                             |
+| GET    | `/api/posts/{id}`                | Get post by ID                  | -                                                                             |
+| POST   | `/api/posts`                     | Create a new post (🔒)          | `{ "content": "string", "privacy": "PUBLIC/PRIVATE", "imageUrl?": "string" }` |
+| PATCH  | `/api/posts/{id}`                | Update a post (🔒)              | `{ "content?": "string", "imageUrl?": "string" }`                             |
+| DELETE | `/api/posts/{id}`                | Delete a post (🔒)              | -                                                                             |
+| GET    | `/api/posts/me`                  | Get own posts (🔒)              | -                                                                             |
+| GET    | `/api/posts/user/{userId}/posts` | Get all posts from another user | -                                                                             |
 
-**Body:**
-
-```json
-{
-  "email": "user1@gmail.com",
-  "password": "12345678"
-}
-```
-
-Returns:
-
-- Access Token (HTTP-only cookie)
-- Refresh Token (HTTP-only cookie)
+> 🔒 = Requires authentication
 
 ---
 
-### 3. Auth Check (Protected)
+## 👥 Group APIs
 
-```http
-GET /api/auth-check
-```
+| Method | Endpoint                                      | Description                | Body                                                                         |
+| ------ | --------------------------------------------- | -------------------------- | ---------------------------------------------------------------------------- |
+| GET    | `/api/groups`                                 | Get all groups             | -                                                                            |
+| GET    | `/api/groups/{id}`                            | Get group by ID            | -                                                                            |
+| POST   | `/api/groups`                                 | Create a new group (🔒)    | `{ "name": "string", "description": "string", "type": "PUBLIC/PRIVATE" }`    |
+| PATCH  | `/api/groups/{id}`                            | Update a group (🔒)        | `{ "name?": "string", "description?": "string", "type?": "PUBLIC/PRIVATE" }` |
+| GET    | `/api/groups/{id}/members`                    | Get all members of a group | -                                                                            |
+| POST   | `/api/groups/{id}/join`                       | Join a group (🔒)          | -                                                                            |
+| PATCH  | `/api/groups/{groupId}/members/{userId}/role` | Change member role (🔒)    | `{ "role": "ADMIN/MEMBER" }`                                                 |
 
-Requires valid access token
-
----
-
-### 4. Logout
-
-```http
-POST /api/logout
-```
-
-Clears cookies
-
----
-
-## &#x20;Post APIs
-
-### 1. Get All Posts
-
-```http
-GET /api/posts
-```
-
----
-
-### 2. Get Post by ID
-
-```http
-GET /api/posts/{id}
-```
-
-**Example:**
-
-```
-/api/posts/1
-```
-
----
-
-### 3. Create Post (Protected)
-
-```http
-POST /api/posts
-```
-
-**Body:**
-
-```json
-{
-  "content": "post 3",
-  "imageUrl": ""
-}
-```
-
----
-
-### 4. Update Post (Protected)
-
-```http
-PATCH /api/posts/{id}
-```
-
-**Body:**
-
-```json
-{
-  "content": "updated post",
-  "imageUrl": ""
-}
-```
-
----
-
-### 5. Delete Post (Protected)
-
-```http
-DELETE /api/posts/{id}
-```
+> 🔒 = Requires authentication
 
 ---
 
