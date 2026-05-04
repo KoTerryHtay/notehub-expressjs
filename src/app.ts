@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import routes from "./routes";
 import cookieParser from "cookie-parser";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 
 export const app = express();
 
@@ -33,12 +34,14 @@ app.get("/", async (req, res) => {
 
 app.use(routes);
 
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-  const status = error.status || 500;
-  const message = error.message || "Server Error";
-  const errorCode = error.code || "Error_Code";
-  res.status(status).json({ message, error: errorCode });
-});
+// app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+//   const status = error.status || 500;
+//   const message = error.message || "Server Error";
+//   const errorCode = error.code || "Error_Code";
+//   res.status(status).json({ success: false, message, error: errorCode });
+// });
+
+app.use(globalErrorHandler);
 
 // cron.schedule("* /2 * * * *", () => {
 // cron.schedule("* 5 * * *", async () => {

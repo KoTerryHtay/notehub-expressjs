@@ -5,6 +5,7 @@ import { errorCode } from "../config/errorCode";
 import { getUserById, updateUserService } from "../modules/auth/auth.service";
 import { Prisma } from "../generated/prisma/client";
 import { CustomRequest } from "../types";
+import { createErrorHelper } from "../utils/createErrorHelper";
 
 export const auth = async (
   req: CustomRequest,
@@ -15,13 +16,17 @@ export const auth = async (
   const refreshToken = req.cookies ? req.cookies.refreshToken : null;
 
   if (!refreshToken) {
-    return next(
-      createError(
-        "You are not an authenticated user.",
-        401,
-        errorCode.unauthenticated,
-      ),
+    throw createErrorHelper.unauthorized(
+      "You are not an authenticated user.",
+      errorCode.unauthenticated,
     );
+    // return next(
+    //   createError(
+    //     "You are not an authenticated user.",
+    //     401,
+    //     errorCode.unauthenticated,
+    //   ),
+    // );
   }
 
   const generateNewTokens = async () => {

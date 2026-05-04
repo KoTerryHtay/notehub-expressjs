@@ -2,7 +2,25 @@ import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 export const getAllPostsService = () => {
-  return prisma.post.findMany();
+  return prisma.post.findMany({ where: { privacy: "PUBLIC" } });
+};
+
+export const getAllPostsByOwnerService = (userId: number) => {
+  return prisma.user.findFirst({
+    where: { id: userId },
+    include: { posts: true },
+  });
+};
+
+export const getAllPostsByUserService = (userId: number) => {
+  return prisma.user.findFirst({
+    where: { id: userId },
+    include: {
+      posts: {
+        where: { privacy: "PUBLIC", groupId: null },
+      },
+    },
+  });
 };
 
 export const getPostByIdService = (postId: number) => {

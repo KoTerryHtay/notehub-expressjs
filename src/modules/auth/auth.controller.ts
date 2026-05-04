@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import { errorCode } from "../../config/errorCode";
-import { checkUserExist, checkUserIfNotExist } from "../../utils/auth";
 import {
+  checkUserExistById,
   createUserService,
   getUserByEmail,
   getUserById,
@@ -13,6 +13,8 @@ import { Prisma } from "../../generated/prisma/client";
 import jwt from "jsonwebtoken";
 import { generateToken } from "../../utils/generate";
 import { CustomRequest } from "../../types";
+import { checkValidationError } from "../../utils/error";
+import { createErrorHelper } from "../../utils/createErrorHelper";
 
 export const register = [
   body("email", "Invalid Email").trim().notEmpty().isEmail(),
@@ -25,21 +27,19 @@ export const register = [
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
 
-    // If validation error occurs
-    if (errors.length > 0) {
-      const error: any = new Error(errors[0]!.msg);
-      error.status = 400;
-      error.code = errorCode.invalid;
-
-      return next(error);
-    }
+    checkValidationError(errors, next);
 
     const { email, password } = req.body;
     console.log({ email, password });
 
     const user = await getUserByEmail(email);
 
-    checkUserExist(user);
+    if (user) {
+      throw createErrorHelper.conflict(
+        "This email has already been registered",
+        errorCode.userExist,
+      );
+    }
 
     // all is ok
     const salt = await bcrypt.genSalt(10);
@@ -129,7 +129,12 @@ export const login = [
     const email = req.body.email as string;
 
     const user = await getUserByEmail(email);
-    checkUserIfNotExist(user);
+    if (!user) {
+      throw createErrorHelper.unauthorized(
+        "This email has not registered.",
+        errorCode.unauthenticated,
+      );
+    }
 
     const isMatchPassword = await bcrypt.compare(password, user!.password);
     if (!isMatchPassword) {
@@ -227,7 +232,12 @@ export const logout = async (
   }
 
   const user = await getUserById(decoded.id);
-  checkUserIfNotExist(user);
+  if (!user) {
+    throw createErrorHelper.unauthorized(
+      "This email has not registered.",
+      errorCode.unauthenticated,
+    );
+  }
 
   if (user!.email !== decoded.email) {
     const error: any = new Error("You are not an authenticated user.");
@@ -266,12 +276,13 @@ export const authCheck = async (
   next: NextFunction,
 ) => {
   const userId = req.userId;
-  const user = await getUserById(userId!);
-  checkUserIfNotExist(user);
+  // const user = await getUserById(userId!);
+  // checkUserIfNotExist(user);
+  const user = await checkUserExistById(userId!);
 
   res.status(200).json({
     message: "You are authenticated.",
-    userId: user?.id,
-    username: user?.name,
+    userId: user.id,
+    username: user.name,
   });
 };

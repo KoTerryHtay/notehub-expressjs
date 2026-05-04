@@ -23,6 +23,11 @@ enum RoleName {
   MEMBER
 }
 
+enum PostPrivacy {
+  PUBLIC
+  PRIVATE
+}
+
 model User {
   id       Int     @id @default(autoincrement())
   name     String?
@@ -68,6 +73,8 @@ model Post {
   id       Int     @id @default(autoincrement())
   content  String
   imageUrl String?
+
+  privacy PostPrivacy? @default(PUBLIC)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

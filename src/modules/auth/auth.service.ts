@@ -1,5 +1,18 @@
 import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
+import { createErrorHelper } from "../../utils/createErrorHelper";
+import { errorCode } from "../../config/errorCode";
+
+export const checkUserExistById = async (userId: number) => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw createErrorHelper.unauthorized(
+      "This user does not exist",
+      errorCode.notFound,
+    );
+  }
+  return user;
+};
 
 export const getUserByEmail = (email: string) => {
   return prisma.user.findUnique({
