@@ -5,6 +5,7 @@ import { errorCode } from "../../config/errorCode";
 import {
   checkUserExistById,
   createUserService,
+  getOwnInfo,
   getUserByEmail,
   getUserById,
   updateUserService,
@@ -15,6 +16,7 @@ import { generateToken } from "../../utils/generate";
 import { CustomRequest } from "../../types";
 import { checkValidationError } from "../../utils/error";
 import { createErrorHelper } from "../../utils/createErrorHelper";
+import { ResponseHandler } from "../../utils/response";
 
 export const register = [
   body("email", "Invalid Email").trim().notEmpty().isEmail(),
@@ -203,6 +205,7 @@ export const logout = async (
   // clear HttpOnly cookies
   // Update refreshToken in User Table
   const refreshToken = req.cookies ? req.cookies.refreshToken : null;
+  console.log("refreshToken >>>", refreshToken);
 
   if (!refreshToken) {
     const error: any = new Error("You are not an authenticated user.");
@@ -279,10 +282,12 @@ export const authCheck = async (
   // const user = await getUserById(userId!);
   // checkUserIfNotExist(user);
   const user = await checkUserExistById(userId!);
+  const userInfo = await getOwnInfo(user.id);
 
-  res.status(200).json({
-    message: "You are authenticated.",
-    userId: user.id,
-    username: user.name,
-  });
+  ResponseHandler.ok(res, userInfo, "You are authenticated.");
+  // res.status(200).json({
+  //   message: "You are authenticated.",
+  //   userId: user.id,
+  //   username: user.name,
+  // });
 };

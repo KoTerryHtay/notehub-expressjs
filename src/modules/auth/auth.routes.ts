@@ -1,11 +1,11 @@
 import express from "express";
 import { authCheck, login, logout, register } from "./auth.controller";
-import { auth } from "../../middlewares/auth";
+import { auth, guestOnlyMiddleware } from "../../middlewares/auth";
 
 const authRoutes = express.Router();
 
-authRoutes.post("/register", register);
-authRoutes.post("/login", login);
+authRoutes.post("/register", guestOnlyMiddleware, register);
+authRoutes.post("/login", guestOnlyMiddleware, login);
 authRoutes.post("/logout", logout);
 
 // Add later

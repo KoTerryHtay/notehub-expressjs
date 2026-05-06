@@ -7,19 +7,26 @@ import { getUserById } from "../auth/auth.service";
 
 import { Prisma } from "../../generated/prisma/client";
 import {
+  addGroupMemberByAdminService,
+  createGroupMemberService,
   createGroupService,
   getAllGroupsService,
   getAllMembersService,
-  getGroupByIdService,
+  leaveGroupMemberService,
+  otherAdmin,
+  removeGroupMemberByAdminService,
   updateGroupRoleService,
   updateGroupService,
 } from "./group.service";
 import {
-  checkGroupCreatePermission,
+  checkAddMemberPermission,
+  checkGroupAdminPermission,
   checkGroupExist,
-  checkGroupUpdatePermission,
+  checkMemberExist,
+  checkRemoveMemberPermission,
 } from "./group.rbac";
 import { ResponseHandler } from "../../utils/response";
+import { createErrorHelper } from "../../utils/createErrorHelper";
 
 export const getAllGroups = async (
   req: Request,
@@ -134,10 +141,10 @@ export const updateGroup = [
       );
     }
 
-    checkGroupUpdatePermission(groupId, user.id, next);
+    const group = await checkGroupAdminPermission(groupId, user.id);
 
     const data: Prisma.GroupUpdateArgs = {
-      where: { id: groupId },
+      where: { id: group.id },
       data: {
         ...(name && { name }),
         ...(description && { description }),
@@ -177,7 +184,7 @@ export const getAllMembers = [
 ];
 
 export const changeRole = [
-  param("id", "Post ID is required").isInt({ gt: 0 }),
+  param("id", "Group ID is required").isInt({ gt: 0 }),
   param("memberId", "Member ID is required").isInt({ gt: 0 }),
   body("role", "role is required")
     .isIn(["OWNER", "ADMIN", "MEMBER"])
@@ -208,7 +215,9 @@ export const changeRole = [
       );
     }
 
-    await checkGroupCreatePermission(groupId, user.id, memberId, next);
+    // await checkGroupCreatePermission(groupId, user.id, memberId);
+    const group = await checkGroupAdminPermission(groupId, user.id);
+    await checkMemberExist(user.id, memberId, group);
 
     const data: Prisma.GroupUpdateArgs = {
       where: { id: groupId },
@@ -275,21 +284,165 @@ export const joinGroup = [
       );
     }
 
-    const data: Prisma.GroupUpdateArgs = {
-      where: { id: groupId },
-      data: {
-        members: {
-          create: { userId: user.id },
-        },
-      },
-    };
+    const newGroupMember = await createGroupMemberService(group.id, user.id);
 
-    const groupUpdated = await updateGroupService(data);
+    ResponseHandler.created(res, newGroupMember, "Successfully join the group");
+  },
+];
 
-    res.status(201).json({
-      message: "Successfully join the group",
-      groupId: groupUpdated.id,
-      group: groupUpdated,
-    });
+export const leaveGroup = [
+  param("id", "Group ID is required").isInt({ gt: 0 }),
+
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array({ onlyFirstError: true });
+
+    checkValidationError(errors, next);
+
+    const groupId = +req.params.id!;
+    const userId = req.userId;
+
+    const user = await getUserById(userId!);
+    if (!user) {
+      return next(
+        createError(
+          "This user has not registered",
+          401,
+          errorCode.unauthenticated,
+        ),
+      );
+    }
+
+    const group = await checkGroupExist(groupId);
+
+    const groupMember = group.members.find(
+      (member) => member.userId === user.id,
+    );
+
+    if (!groupMember) {
+      throw createErrorHelper.badRequest(
+        "This user is not already group member",
+        errorCode.invalid,
+      );
+    }
+
+    const otherAdminCounts = await otherAdmin(group.id, user.id);
+    console.log("otherAdminCounts >>>", otherAdminCounts);
+    if (groupMember.role === "OWNER" || otherAdminCounts.length === 0) {
+      throw createErrorHelper.badRequest(
+        "You are the only owner or admin. Please assign owner or admin role to another user first.",
+        errorCode.invalid,
+      );
+    }
+
+    // const data: Prisma.GroupUpdateArgs = {
+    //   where: { id: groupId },
+    //   data: {
+    //     members: {
+    //       delete: { userId_groupId: { userId: user.id, groupId: group.id } },
+    //     },
+    //   },
+    // };
+
+    console.log(groupMember.id, group.id);
+    const groupUpdated = await leaveGroupMemberService(
+      groupMember.userId,
+      group.id,
+    );
+
+    ResponseHandler.ok(res, groupUpdated.id, "Successfully leave the group");
+  },
+];
+
+export const removeGroupMemberByAdmin = [
+  param("id", "Group ID is required").isInt({ gt: 0 }),
+  param("memberId", "Member ID is required").isInt({ gt: 0 }),
+
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array({ onlyFirstError: true });
+
+    checkValidationError(errors, next);
+
+    const groupId = +req.params.id!;
+    const memberId = +req.params.memberId!;
+
+    const adminId = req.userId;
+
+    console.log("req >>>", { groupId, memberId, adminId });
+
+    const admin = await getUserById(adminId!);
+    const member = await getUserById(memberId!);
+    // console.log("admin >>>", admin);
+    // console.log("member >>>", member);
+
+    if (!admin || !member) {
+      return next(
+        createError(
+          "This user has not registered",
+          401,
+          errorCode.unauthenticated,
+        ),
+      );
+    }
+
+    // await checkGroupCreatePermission(groupId, admin.id, member.id);
+    await checkRemoveMemberPermission(groupId, admin.id, member.id);
+
+    const removedGroupMember = await removeGroupMemberByAdminService(
+      groupId,
+      member.id,
+    );
+
+    ResponseHandler.ok(
+      res,
+      removedGroupMember.id,
+      "Successfully removed this member",
+    );
+  },
+];
+
+export const addGroupMemberByAdmin = [
+  param("id", "Group ID is required").isInt({ gt: 0 }),
+  param("memberId", "Member ID is required").isInt({ gt: 0 }),
+
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array({ onlyFirstError: true });
+
+    checkValidationError(errors, next);
+
+    const groupId = +req.params.id!;
+    const memberId = +req.params.memberId!;
+
+    const adminId = req.userId;
+
+    console.log("req >>>", { groupId, memberId, adminId });
+
+    const admin = await getUserById(adminId!);
+    const member = await getUserById(memberId!);
+    // console.log("admin >>>", admin);
+    // console.log("member >>>", member);
+
+    if (!admin || !member) {
+      return next(
+        createError(
+          "This user has not registered",
+          401,
+          errorCode.unauthenticated,
+        ),
+      );
+    }
+
+    // await checkGroupCreatePermission(groupId, admin.id, member.id);
+    await checkAddMemberPermission(groupId, admin.id, member.id);
+
+    const addedGroupMember = await addGroupMemberByAdminService(
+      groupId,
+      member.id,
+    );
+
+    ResponseHandler.ok(
+      res,
+      addedGroupMember.id,
+      "Successfully added this member",
+    );
   },
 ];

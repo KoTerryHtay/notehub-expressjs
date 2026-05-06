@@ -3,6 +3,17 @@ import { prisma } from "../../lib/prisma";
 import { createErrorHelper } from "../../utils/createErrorHelper";
 import { errorCode } from "../../config/errorCode";
 
+export const getOwnInfo = async (userId: number) => {
+  const userInfo = await prisma.user.findFirst({
+    where: { id: userId },
+    include: {
+      posts: true,
+      memberships: true,
+    },
+  });
+  return userInfo;
+};
+
 export const checkUserExistById = async (userId: number) => {
   const user = await getUserById(userId);
   if (!user) {
