@@ -83,48 +83,67 @@ Feature-based structure = scalable + clean architecture
 
 ---
 
-# 📝 Note Hub API Documentation
+## 📬 Postman Collection
+
+The [Postman](https://www.postman.com/) API collection file is included in this repository:
+
+- **File:** `Note Hub.postman_collection.json`
+
+### How to use
+
+1. Install [Postman](https://www.postman.com/downloads/)
+2. Click **Import** → **Upload Files** and select the `Note Hub.postman_collection.json` file
+3. Set the environment variable `{{devUrl}}` to your local server URL (e.g., `http://localhost:4000`)
+4. Start testing the endpoints
+
+> All 🔒 endpoints require a valid authentication session. Use the `login` or `register` requests first, then the session cookie will be automatically managed by Postman.
 
 ## 🔐 Authentication APIs
 
-| Method | Endpoint          | Description                      | Body                                          |
-| ------ | ----------------- | -------------------------------- | --------------------------------------------- |
-| POST   | `/api/register`   | Register a new user              | `{ "email": "string", "password": "string" }` |
-| POST   | `/api/login`      | Login user                       | `{ "email": "string", "password": "string" }` |
-| GET    | `/api/auth-check` | Check authentication status (🔒) | -                                             |
-| POST   | `/api/logout`     | Logout user (🔒)                 | -                                             |
-
-> 🔒 = Requires authentication (via session/token)
-
----
+| Method | Endpoint          | Auth | Description                 | Body                                          |
+| ------ | ----------------- | ---- | --------------------------- | --------------------------------------------- |
+| POST   | `/api/register`   |      | Register a new user         | `{ "email": "string", "password": "string" }` |
+| POST   | `/api/login`      |      | Login user                  | `{ "email": "string", "password": "string" }` |
+| GET    | `/api/auth-check` | 🔒   | Check authentication status | –                                             |
+| POST   | `/api/logout`     | 🔒   | Logout user                 | –                                             |
 
 ## 📄 Posts APIs
 
-| Method | Endpoint                         | Description                     | Body                                                                          |
-| ------ | -------------------------------- | ------------------------------- | ----------------------------------------------------------------------------- |
-| GET    | `/api/posts`                     | Get all posts                   | -                                                                             |
-| GET    | `/api/posts/{id}`                | Get post by ID                  | -                                                                             |
-| POST   | `/api/posts`                     | Create a new post (🔒)          | `{ "content": "string", "privacy": "PUBLIC/PRIVATE", "imageUrl?": "string" }` |
-| PATCH  | `/api/posts/{id}`                | Update a post (🔒)              | `{ "content?": "string", "imageUrl?": "string" }`                             |
-| DELETE | `/api/posts/{id}`                | Delete a post (🔒)              | -                                                                             |
-| GET    | `/api/posts/me`                  | Get own posts (🔒)              | -                                                                             |
-| GET    | `/api/posts/user/{userId}/posts` | Get all posts from another user | -                                                                             |
+| Method | Endpoint                         | Auth | Description                                        | Body                                                                          |
+| ------ | -------------------------------- | ---- | -------------------------------------------------- | ----------------------------------------------------------------------------- |
+| GET    | `/api/posts`                     |      | Get all posts (public & private based on privacy)  | –                                                                             |
+| GET    | `/api/posts/{id}`                |      | Get post by ID                                     | –                                                                             |
+| POST   | `/api/posts`                     | 🔒   | Create a new post                                  | `{ "content": "string", "privacy": "PUBLIC/PRIVATE", "imageUrl?": "string" }` |
+| PATCH  | `/api/posts/{id}`                | 🔒   | Update own post                                    | `{ "content?": "string", "imageUrl?": "string" }`                             |
+| DELETE | `/api/posts/{id}`                | 🔒   | Delete own post                                    | –                                                                             |
+| GET    | `/api/posts/me`                  | 🔒   | Get all posts of logged-in user                    | –                                                                             |
+| GET    | `/api/posts/user/{userId}/posts` |      | Get all posts from another user (respects privacy) | –                                                                             |
 
-> 🔒 = Requires authentication
+## 👥 Groups APIs
 
----
+| Method | Endpoint                                        | Auth | Description                                          | Body                                                                         |
+| ------ | ----------------------------------------------- | ---- | ---------------------------------------------------- | ---------------------------------------------------------------------------- |
+| GET    | `/api/groups`                                   |      | Get all groups                                       | –                                                                            |
+| GET    | `/api/groups/{id}`                              |      | Get group details by ID                              | –                                                                            |
+| POST   | `/api/groups`                                   | 🔒   | Create a new group                                   | `{ "name": "string", "description": "string", "type": "PUBLIC/PRIVATE" }`    |
+| PATCH  | `/api/groups/{id}`                              | 🔒   | Update group (admin/owner only)                      | `{ "name?": "string", "description?": "string", "type?": "PUBLIC/PRIVATE" }` |
+| GET    | `/api/groups/{id}/members`                      |      | Get all members of a group                           | –                                                                            |
+| POST   | `/api/groups/{id}/join`                         | 🔒   | Join a public group or request to join private group | –                                                                            |
+| PATCH  | `/api/groups/{groupId}/members/{userId}/role`   | 🔒   | Change member role (admin only)                      | `{ "role": "ADMIN/MEMBER" }`                                                 |
+| DELETE | `/api/groups/{id}/leave`                        | 🔒   | Leave a group (current user)                         | –                                                                            |
+| DELETE | `/api/groups/{groupId}/members/{userId}/remove` | 🔒   | Remove a member (admin/owner only)                   | –                                                                            |
+| POST   | `/api/groups/{groupId}/members/{userId}/add`    | 🔒   | Add a member (admin/owner only)                      | –                                                                            |
+| DELETE | `/api/groups/{id}`                              | 🔒   | Delete group (owner only)                            | –                                                                            |
 
-## 👥 Group APIs
+## 📝 Group Posts APIs
 
-| Method | Endpoint                                      | Description                | Body                                                                         |
-| ------ | --------------------------------------------- | -------------------------- | ---------------------------------------------------------------------------- |
-| GET    | `/api/groups`                                 | Get all groups             | -                                                                            |
-| GET    | `/api/groups/{id}`                            | Get group by ID            | -                                                                            |
-| POST   | `/api/groups`                                 | Create a new group (🔒)    | `{ "name": "string", "description": "string", "type": "PUBLIC/PRIVATE" }`    |
-| PATCH  | `/api/groups/{id}`                            | Update a group (🔒)        | `{ "name?": "string", "description?": "string", "type?": "PUBLIC/PRIVATE" }` |
-| GET    | `/api/groups/{id}/members`                    | Get all members of a group | -                                                                            |
-| POST   | `/api/groups/{id}/join`                       | Join a group (🔒)          | -                                                                            |
-| PATCH  | `/api/groups/{groupId}/members/{userId}/role` | Change member role (🔒)    | `{ "role": "ADMIN/MEMBER" }`                                                 |
+| Method | Endpoint                               | Auth | Description                                       | Body                                              |
+| ------ | -------------------------------------- | ---- | ------------------------------------------------- | ------------------------------------------------- |
+| GET    | `/api/groups/{groupId}/posts`          |      | Get all posts inside a group (visible to members) | –                                                 |
+| GET    | `/api/groups/{groupId}/posts/{postId}` |      | Get a specific group post by ID                   | –                                                 |
+| POST   | `/api/groups/{groupId}/posts`          | 🔒   | Create a post in a group (must be member)         | `{ "content": "string", "imageUrl?": "string" }`  |
+| PATCH  | `/api/groups/{groupId}/posts/{postId}` | 🔒   | Update own group post                             | `{ "content?": "string", "imageUrl?": "string" }` |
+| DELETE | `/api/groups/{groupId}/posts/{postId}` | 🔒   | Delete group post (owner or admin/owner of group) | –                                                 |
 
 > 🔒 = Requires authentication
 

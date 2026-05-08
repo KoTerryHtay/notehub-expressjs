@@ -1,0 +1,714 @@
+{
+  "info": {
+    "_postman_id": "ed69f409-238d-478c-969e-e0658dec2c0c",
+    "name": "Note Hub",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "28001554"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"user3@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/register",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"user1@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/login",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "auth-check",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/auth-check",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth-check"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/logout",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "posts",
+      "item": [
+        {
+          "name": "get all posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/posts",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get post by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/posts/1",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create post",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"post 4\",\r\n    \"privacy\": \"PRIVATE\"\r\n    // \"imageUrl\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/posts",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update post",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{    \r\n    \"content\": \"post 3\"\r\n    // \"imageUrl\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/posts/2",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "posts",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete post",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/posts/4",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "posts",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "own posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/posts/me",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "posts",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all posts from another user",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/posts/user/2/posts",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "posts",
+                "user",
+                "2",
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "groups",
+      "item": [
+        {
+          "name": "get all groups",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"post 3\"\r\n    // \"imageUrl\": \"\"\r\n}"
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/groups",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get group by id",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"post 3\"\r\n    // \"imageUrl\": \"\"\r\n}"
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/groups/3",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create new group",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"group 3\",\r\n    \"description\": \"group 3 descripton\",\r\n    \"type\": \"PUBLIC\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/groups",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update group",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"group 1\"\r\n    // \"description\": \"group 1 descripton\",\r\n    // \"type\": \"PRIVATE\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/groups/2",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all members",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/groups/2/members",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "2",
+                "members"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "join group",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/groups/3/join",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "3",
+                "join"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "change group role",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"role\": \"ADMIN\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/groups/1/members/2/role",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "1",
+                "members",
+                "2",
+                "role"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "leave group",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"group 1\"\r\n    // \"description\": \"group 1 descripton\",\r\n    // \"type\": \"PRIVATE\"\r\n}"
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/groups/3/leave",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "3",
+                "leave"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "remove member by admin",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/groups/3/members/2/remove",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "3",
+                "members",
+                "2",
+                "remove"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "add member by admin",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/groups/3/members/2/add",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "3",
+                "members",
+                "2",
+                "add"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete group by owner",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"group 3\",\r\n    \"description\": \"group 3 descripton\",\r\n    \"type\": \"PUBLIC\"\r\n}"
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/groups/4",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "group posts",
+      "item": [
+        {
+          "name": "get all group posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/groups/1/posts",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "1",
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get group post by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/groups/1/posts/1",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "1",
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create group post",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"group post 1  from user 2\"\r\n    // \"imageUrl\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/groups/1/posts",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "1",
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update group post",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"group post 01  from user 2\"\r\n    // \"imageUrl\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{devUrl}}/api/groups/1/posts/7",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "1",
+                "posts",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete group post by owner or admin",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{devUrl}}/api/groups/1/posts/7",
+              "host": [
+                "{{devUrl}}"
+              ],
+              "path": [
+                "api",
+                "groups",
+                "1",
+                "posts",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
