@@ -1,27 +1,8 @@
-import { Request, Response, NextFunction } from "express";
 import { getGroupByIdService } from "./group.service";
-import { createError } from "../../utils/error";
 import { errorCode } from "../../config/errorCode";
 import { createErrorHelper } from "../../utils/createErrorHelper";
 import { GroupType, RoleName } from "../../generated/prisma/enums";
 import { Prisma } from "../../generated/prisma/client";
-
-type GroupProps = {
-  members: {
-    id: number;
-    role: RoleName;
-    joinedAt: Date;
-    userId: number;
-    groupId: number;
-  }[];
-} & {
-  id: number;
-  name: string;
-  description: string | null;
-  type: GroupType;
-  createdAt: Date;
-  updatedAt: Date;
-};
 
 export const checkGroupExist = async (groupId: number, type?: GroupType) => {
   const group = await getGroupByIdService(+groupId, type);
@@ -85,6 +66,7 @@ export const checkGroupExist = async (groupId: number, type?: GroupType) => {
 export const checkGroupAdminPermission = async (
   groupId: number,
   adminId: number,
+  role: RoleName[] = ["ADMIN", "OWNER"],
 ) => {
   const group = await checkGroupExist(groupId);
 
@@ -97,7 +79,7 @@ export const checkGroupAdminPermission = async (
     );
   }
 
-  const isAdmin = ["OWNER", "ADMIN"].includes(groupMainMember.role);
+  const isAdmin = role.includes(groupMainMember.role);
 
   if (!isAdmin) {
     throw createErrorHelper.forbidden(
@@ -110,11 +92,17 @@ export const checkGroupAdminPermission = async (
 };
 
 export const checkMemberExist = async (
-  adminId: number,
+  group: Prisma.GroupGetPayload<{ include: { members: true } }>,
   memberId: number,
-  group: GroupProps,
+  adminId?: number,
 ) => {
   const member = group.members.find((m) => m.userId === memberId);
+  console.log(
+    "checkMemberExist - memberId >>>",
+    memberId,
+    "adminId >>>",
+    adminId,
+  );
 
   if (!member) {
     throw createErrorHelper.badRequest(

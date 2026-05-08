@@ -4,6 +4,7 @@ import {
   addGroupMemberByAdmin,
   changeRole,
   createGroup,
+  deleteGroup,
   getAllGroups,
   getAllMembers,
   getGroupById,
@@ -12,6 +13,7 @@ import {
   removeGroupMemberByAdmin,
   updateGroup,
 } from "./group.controller";
+import groupPostRoutes from "./groupPost.routes";
 
 const groupRoutes = express.Router();
 
@@ -20,7 +22,7 @@ groupRoutes.get("/:id", getGroupById);
 
 groupRoutes.post("/", auth, createGroup);
 groupRoutes.patch("/:id", auth, updateGroup);
-// groupRoutes.delete("/:id", auth, deletePost);
+groupRoutes.delete("/:id", auth, deleteGroup);
 
 // Join Group
 groupRoutes.post("/:id/join", auth, joinGroup);
@@ -42,5 +44,8 @@ groupRoutes.post("/:id/members/:memberId/add", auth, addGroupMemberByAdmin);
 
 // change RBAC for Group
 groupRoutes.patch("/:id/members/:memberId/role", auth, changeRole);
+
+// group posts route
+groupRoutes.use("/:groupId/posts", groupPostRoutes);
 
 export default groupRoutes;

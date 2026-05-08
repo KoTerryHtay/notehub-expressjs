@@ -30,9 +30,15 @@ export const updateGroupService = (data: Prisma.GroupUpdateArgs) => {
   return prisma.group.update(data);
 };
 
-export const deleteGroupService = (userId: number, groupId: number) => {
+export const deleteGroupService = async (groupId: number) => {
+  await prisma.groupMember.deleteMany({
+    where: {
+      groupId: groupId,
+    },
+  });
+
   return prisma.group.delete({
-    where: { id: groupId, authorId: userId },
+    where: { id: groupId },
   });
 };
 

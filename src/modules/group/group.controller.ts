@@ -10,6 +10,7 @@ import {
   addGroupMemberByAdminService,
   createGroupMemberService,
   createGroupService,
+  deleteGroupService,
   getAllGroupsService,
   getAllMembersService,
   leaveGroupMemberService,
@@ -217,7 +218,7 @@ export const changeRole = [
 
     // await checkGroupCreatePermission(groupId, user.id, memberId);
     const group = await checkGroupAdminPermission(groupId, user.id);
-    await checkMemberExist(user.id, memberId, group);
+    await checkMemberExist(group, memberId, user.id);
 
     const data: Prisma.GroupUpdateArgs = {
       where: { id: groupId },
@@ -443,6 +444,29 @@ export const addGroupMemberByAdmin = [
       res,
       addedGroupMember.id,
       "Successfully added this member",
+    );
+  },
+];
+
+export const deleteGroup = [
+  param("id", "Group ID is required").isInt({ gt: 0 }),
+
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array({ onlyFirstError: true });
+
+    checkValidationError(errors, next);
+
+    const groupId = +req.params.id!;
+    const userId = req.userId!;
+
+    const group = await checkGroupExist(groupId);
+    await checkGroupAdminPermission(group.id, userId, ["OWNER"]);
+    const deletedGroup = await deleteGroupService(group.id);
+
+    ResponseHandler.ok(
+      res,
+      deletedGroup.id,
+      `Delete group ${deletedGroup.id} Id successfully`,
     );
   },
 ];

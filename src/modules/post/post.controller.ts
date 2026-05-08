@@ -148,7 +148,7 @@ export const createPost = [
 export const updatePost = [
   param("id", "Post ID is required").isInt({ gt: 0 }),
 
-  body("content", "Content is required").trim().notEmpty().escape(),
+  body("content", "Content is required").optional().trim().notEmpty().escape(),
   body("imageUrl", "image url is invalid").optional({ nullable: true }),
   body("privacy", "privacy is invalid")
     .optional()

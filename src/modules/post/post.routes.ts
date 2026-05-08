@@ -26,10 +26,4 @@ postRoutes.get("/:id", getPostById);
 postRoutes.patch("/:id", auth, updatePost);
 postRoutes.delete("/:id", auth, deletePost);
 
-// CRUD for Group Posts
-// groupRoutes.get("/:id/posts", auth, getAllGroupPosts);
-// groupRoutes.post("/:id/posts", auth, createGroupPost);
-// groupRoutes.patch("/:id/posts/:postId", auth, updateGroupPostById);
-// groupRoutes.delete("/:id/posts/:postId", auth, deleteGroupPostById);
-
 export default postRoutes;

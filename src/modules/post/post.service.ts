@@ -42,3 +42,9 @@ export const deletePostService = (userId: number, postId: number) => {
     where: { id: postId, authorId: userId },
   });
 };
+
+export const deletePostByAdminService = (postId: number) => {
+  return prisma.post.delete({
+    where: { id: postId },
+  });
+};

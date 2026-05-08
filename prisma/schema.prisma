@@ -63,7 +63,7 @@ model GroupMember {
   userId  Int
   user    User  @relation(fields: [userId], references: [id])
   groupId Int
-  group   Group @relation(fields: [groupId], references: [id])
+  group   Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   // RBAC logic: One User, One Group, One Role
   @@unique([userId, groupId])
