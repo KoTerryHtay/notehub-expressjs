@@ -1,4 +1,4 @@
-import { AppError } from "./AppError";
+import { AppError } from "./AppError.js";
 
 export const createErrorHelper = {
   badRequest: (message = "Bad Request", code?: string) => {

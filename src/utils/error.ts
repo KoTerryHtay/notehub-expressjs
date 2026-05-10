@@ -1,7 +1,7 @@
 import { NextFunction } from "express";
 import { ValidationError } from "express-validator";
-import { errorCode } from "../config/errorCode";
-import { createErrorHelper } from "./createErrorHelper";
+import { errorCode } from "../config/errorCode.js";
+import { createErrorHelper } from "./createErrorHelper.js";
 
 export const createError = (message: string, status: number, code: string) => {
   const error: any = new Error(message);

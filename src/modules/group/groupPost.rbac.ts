@@ -1,6 +1,6 @@
-import { errorCode } from "../../config/errorCode";
-import { createErrorHelper } from "../../utils/createErrorHelper";
-import { checkGroupExist } from "./group.rbac";
+import { errorCode } from "../../config/errorCode.js";
+import { createErrorHelper } from "../../utils/createErrorHelper.js";
+import { checkGroupExist } from "./group.rbac.js";
 
 export const checkMemberPrivateGroup = async (
   groupId: number,

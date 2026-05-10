@@ -1,12 +1,12 @@
 import express, { Request, Response } from "express";
-import { auth } from "../../middlewares/auth";
+import { auth } from "../../middlewares/auth.js";
 import {
   createGroupPost,
   deleteGroupPostById,
   getAllGroupPosts,
   getGroupPostById,
   updateGroupPostById,
-} from "./groupPost.controller";
+} from "./groupPost.controller.js";
 
 const groupPostRoutes = express.Router({ mergeParams: true });
 

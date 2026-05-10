@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
-import { errorCode } from "../../config/errorCode";
+import { errorCode } from "../../config/errorCode.js";
 import {
   checkUserExistById,
   createUserService,
@@ -9,14 +9,14 @@ import {
   getUserByEmail,
   getUserById,
   updateUserService,
-} from "./auth.service";
-import { Prisma } from "../../generated/prisma/client";
+} from "./auth.service.js";
+import { Prisma } from "../../generated/prisma/client.js";
 import jwt from "jsonwebtoken";
-import { generateToken } from "../../utils/generate";
-import { CustomRequest } from "../../types";
-import { checkValidationError } from "../../utils/error";
-import { createErrorHelper } from "../../utils/createErrorHelper";
-import { ResponseHandler } from "../../utils/response";
+import { generateToken } from "../../utils/generate.js";
+import { CustomRequest } from "../../types/index.js";
+import { checkValidationError } from "../../utils/error.js";
+import { createErrorHelper } from "../../utils/createErrorHelper.js";
+import { ResponseHandler } from "../../utils/response.js";
 
 export const register = [
   body("email", "Invalid Email").trim().notEmpty().isEmail(),

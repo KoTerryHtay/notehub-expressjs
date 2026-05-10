@@ -1,6 +1,6 @@
 import express from "express";
-import { authCheck, login, logout, register } from "./auth.controller";
-import { auth, guestOnlyMiddleware } from "../../middlewares/auth";
+import { authCheck, login, logout, register } from "./auth.controller.js";
+import { auth, guestOnlyMiddleware } from "../../middlewares/auth.js";
 
 const authRoutes = express.Router();
 

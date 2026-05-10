@@ -1,5 +1,5 @@
 import express from "express";
-import { auth } from "../../middlewares/auth";
+import { auth } from "../../middlewares/auth.js";
 import {
   addGroupMemberByAdmin,
   changeRole,
@@ -12,8 +12,8 @@ import {
   leaveGroup,
   removeGroupMemberByAdmin,
   updateGroup,
-} from "./group.controller";
-import groupPostRoutes from "./groupPost.routes";
+} from "./group.controller.js";
+import groupPostRoutes from "./groupPost.routes.js";
 
 const groupRoutes = express.Router();
 

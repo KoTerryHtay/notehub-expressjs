@@ -1,7 +1,7 @@
-import { Prisma } from "../../generated/prisma/client";
-import { prisma } from "../../lib/prisma";
-import { createErrorHelper } from "../../utils/createErrorHelper";
-import { errorCode } from "../../config/errorCode";
+import { Prisma } from "../../generated/prisma/client.js";
+import { prisma } from "../../lib/prisma.js";
+import { createErrorHelper } from "../../utils/createErrorHelper.js";
+import { errorCode } from "../../config/errorCode.js";
 
 export const getOwnInfo = async (userId: number) => {
   const userInfo = await prisma.user.findFirst({

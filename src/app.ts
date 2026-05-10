@@ -1,9 +1,9 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import routes from "./routes";
+import routes from "./routes/index.js";
 import cookieParser from "cookie-parser";
-import { globalErrorHandler } from "./middlewares/globalErrorHandler";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler.js";
 
 export const app = express();
 

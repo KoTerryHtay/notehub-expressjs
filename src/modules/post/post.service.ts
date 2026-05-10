@@ -1,5 +1,5 @@
-import { Prisma } from "../../generated/prisma/client";
-import { prisma } from "../../lib/prisma";
+import { Prisma } from "../../generated/prisma/client.js";
+import { prisma } from "../../lib/prisma.js";
 
 export const getAllPostsService = () => {
   return prisma.post.findMany({ where: { privacy: "PUBLIC" } });

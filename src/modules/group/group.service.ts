@@ -1,5 +1,5 @@
-import { GroupType, Prisma, RoleName } from "../../generated/prisma/client";
-import { prisma } from "../../lib/prisma";
+import { GroupType, Prisma, RoleName } from "../../generated/prisma/client.js";
+import { prisma } from "../../lib/prisma.js";
 
 export const getAllGroupsService = () => {
   return prisma.group.findMany();

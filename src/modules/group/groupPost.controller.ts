@@ -1,23 +1,23 @@
 import { Response, NextFunction } from "express";
 import { body, param, validationResult } from "express-validator";
-import { checkValidationError } from "../../utils/error";
-import { ResponseHandler } from "../../utils/response";
+import { checkValidationError } from "../../utils/error.js";
+import { ResponseHandler } from "../../utils/response.js";
 import {
   getAllGroupPostsService,
   getGroupPostByIdService,
-} from "./groupPost.service";
-import { checkGroupExist, checkMemberExist } from "./group.rbac";
-import { CustomRequest } from "../../types";
-import { Prisma } from "../../generated/prisma/client";
+} from "./groupPost.service.js";
+import { checkGroupExist, checkMemberExist } from "./group.rbac.js";
+import { CustomRequest } from "../../types/index.js";
+import { Prisma } from "../../generated/prisma/client.js";
 import {
   createPostService,
   deletePostByAdminService,
   deletePostService,
   getPostByIdService,
   updatePostService,
-} from "../post/post.service";
-import { createErrorHelper } from "../../utils/createErrorHelper";
-import { errorCode } from "../../config/errorCode";
+} from "../post/post.service.js";
+import { createErrorHelper } from "../../utils/createErrorHelper.js";
+import { errorCode } from "../../config/errorCode.js";
 
 export const getAllGroupPosts = [
   param("groupId", "Group ID is required").isInt({ gt: 0 }),

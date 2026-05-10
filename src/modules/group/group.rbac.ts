@@ -1,8 +1,8 @@
-import { getGroupByIdService } from "./group.service";
-import { errorCode } from "../../config/errorCode";
-import { createErrorHelper } from "../../utils/createErrorHelper";
-import { GroupType, RoleName } from "../../generated/prisma/enums";
-import { Prisma } from "../../generated/prisma/client";
+import { getGroupByIdService } from "./group.service.js";
+import { errorCode } from "../../config/errorCode.js";
+import { createErrorHelper } from "../../utils/createErrorHelper.js";
+import { GroupType, RoleName } from "../../generated/prisma/enums.js";
+import { Prisma } from "../../generated/prisma/client.js";
 
 export const checkGroupExist = async (groupId: number, type?: GroupType) => {
   const group = await getGroupByIdService(+groupId, type);

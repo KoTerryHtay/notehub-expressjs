@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { body, param, validationResult } from "express-validator";
-import { checkValidationError, createError } from "../../utils/error";
-import { errorCode } from "../../config/errorCode";
-import { CustomRequest } from "../../types";
-import { getUserById } from "../auth/auth.service";
+import { checkValidationError, createError } from "../../utils/error.js";
+import { errorCode } from "../../config/errorCode.js";
+import { CustomRequest } from "../../types/index.js";
+import { getUserById } from "../auth/auth.service.js";
 
-import { Prisma } from "../../generated/prisma/client";
+import { Prisma } from "../../generated/prisma/client.js";
 import {
   addGroupMemberByAdminService,
   createGroupMemberService,
@@ -18,16 +18,16 @@ import {
   removeGroupMemberByAdminService,
   updateGroupRoleService,
   updateGroupService,
-} from "./group.service";
+} from "./group.service.js";
 import {
   checkAddMemberPermission,
   checkGroupAdminPermission,
   checkGroupExist,
   checkMemberExist,
   checkRemoveMemberPermission,
-} from "./group.rbac";
-import { ResponseHandler } from "../../utils/response";
-import { createErrorHelper } from "../../utils/createErrorHelper";
+} from "./group.rbac.js";
+import { ResponseHandler } from "../../utils/response.js";
+import { createErrorHelper } from "../../utils/createErrorHelper.js";
 
 export const getAllGroups = async (
   req: Request,

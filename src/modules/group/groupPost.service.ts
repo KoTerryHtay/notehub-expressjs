@@ -1,7 +1,7 @@
-import { errorCode } from "../../config/errorCode";
-import { prisma } from "../../lib/prisma";
-import { createErrorHelper } from "../../utils/createErrorHelper";
-import { checkMemberPrivateGroup } from "./groupPost.rbac";
+import { errorCode } from "../../config/errorCode.js";
+import { prisma } from "../../lib/prisma.js";
+import { createErrorHelper } from "../../utils/createErrorHelper.js";
+import { checkMemberPrivateGroup } from "./groupPost.rbac.js";
 
 export const getAllGroupPostsService = async (
   groupId: number,

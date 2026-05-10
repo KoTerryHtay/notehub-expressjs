@@ -1,11 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { createError } from "../utils/error";
-import { errorCode } from "../config/errorCode";
-import { getUserById, updateUserService } from "../modules/auth/auth.service";
-import { Prisma } from "../generated/prisma/client";
-import { CustomRequest } from "../types";
-import { createErrorHelper } from "../utils/createErrorHelper";
+import { createError } from "../utils/error.js";
+import { errorCode } from "../config/errorCode.js";
+import {
+  getUserById,
+  updateUserService,
+} from "../modules/auth/auth.service.js";
+import { Prisma } from "../generated/prisma/client.js";
+import { CustomRequest } from "../types/index.js";
+import { createErrorHelper } from "../utils/createErrorHelper.js";
 
 export const auth = async (
   req: CustomRequest,
