@@ -10,7 +10,7 @@ Users can register, login, and manage posts and groups (public / private).
 - Authentication (Register, Login, Logout)
 - JWT-based Auth (Access Token + Refresh Token via HTTP-only cookies)
 - CRUD Posts
-- Group system (public / private) _(planned / extendable)_
+- Group system (public / private)
 - Feature-based scalable folder structure
 - Prisma ORM
 
@@ -163,8 +163,6 @@ The [Postman](https://www.postman.com/) API collection file is included in this 
 
 ## &#x20;Future Improvements
 
-- RBAC (Role-Based Access Control)
-- Group permission system (public / private)
 - Rate limiting & security enhancements
 - Refresh token rotation & blacklist
 
