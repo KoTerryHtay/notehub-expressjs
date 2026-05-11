@@ -192,7 +192,7 @@ export const updatePost = [
     }
 
     const data: Prisma.PostUpdateArgs = {
-      where: { id: postId, authorId: userId },
+      where: { id: postId, authorId: user.id },
       data: {
         ...(content && { content }),
         ...(imageUrl && { imageUrl }),
