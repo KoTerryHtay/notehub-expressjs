@@ -226,7 +226,9 @@ export const changeRole = [
         members: {
           update: {
             where: {
-              id: memberId,
+              // id: memberId,
+              // userId: memberId,
+              userId_groupId: { groupId, userId: memberId },
             },
             data: {
               role,
